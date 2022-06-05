@@ -2,8 +2,9 @@ var input_content = null;
 var input_title = null;
 
 import "regenerator-runtime/runtime";
+import { async } from "regenerator-runtime/runtime";
 import { initContract, login, logout, getBlogs, addBlog,
-         counterDecrement, counterReset } from './near/utils'
+         deleteBlog, counterReset } from './near/utils'
 
 function resetUI(){
   document.querySelector('#show').classList.replace('number','loader');
@@ -39,17 +40,22 @@ document.querySelector('#addBlog').addEventListener('click', async () => {
   await updateUI();
 });
 
-document.querySelector('#minus').addEventListener('click', async  () => {
-  resetUI();
-  await counterDecrement();
-  await updateUI();
-});
 
-document.querySelector('#a').addEventListener('click', async  () => {
-  resetUI();
-  await counterReset();
-  await updateUI();
-});
+async function delete_blog(){
+
+  $('.deleteBlog').on("click", async function(){
+    var blog_id = $(this).attr('blog_id');
+    resetUI();
+    await deleteBlog(blog_id);
+    await updateUI();
+  })
+}
+
+// document.querySelector('#a').addEventListener('click', async  () => {
+//   resetUI();
+//   await counterReset();
+//   await updateUI();
+// });
 
 // Log in and log out users using NEAR Wallet
 document.querySelector('.sign-in .btn').onclick = login;
@@ -89,12 +95,12 @@ async function updateUI(){
 
   if(blogs != undefined){
     var innerText = '';
-    let blogArr = Object.keys(blogs).map((k) => blogs[k])
 
-    for (var i = 0 ;i < blogArr.length; i++){
-      innerText += '<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + blogArr[i].title + '</h5><p class="card-text">'+ blogArr[i].content +'</p><a href="#" class="btn btn-primary">Detail</a></div></div></div>'
+    for (var key of Object.keys(blogs)) {
+      innerText += '<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + blogs[key].title + '</h5><p class="card-text">'+ blogs[key].content +'</p><a href="#" class="btn btn-primary">Detail</a><button class="btn btn-danger deleteBlog" blog_id="'+ key +'">Delete</button></div></div></div>';
     }
-
     document.querySelector('.list-blog').innerHTML = innerText;
+    delete_blog();
   }
+
 }
