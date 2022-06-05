@@ -54,8 +54,10 @@ export async function deleteBlog(blog_id){
   await window.contract.delete_blog({args:{"blog_id": blog_id}})
 }
 
-export async function counterDecrement(){
-  await window.contract.decrement({args:{}})
+export async function detailBlog(blog_id){
+  console.log('blog is in utils is', blog_id);
+  let blog = await window.contract.get_blog_by_id({blog_id: blog_id});
+  return blog;
 }
 
 export async function counterReset(){

@@ -4,11 +4,11 @@ var input_title = null;
 import "regenerator-runtime/runtime";
 import { async } from "regenerator-runtime/runtime";
 import { initContract, login, logout, getBlogs, addBlog,
-         deleteBlog, counterReset } from './near/utils'
+         deleteBlog, detailBlog } from './near/utils'
 
 function resetUI(){
-  document.querySelector('#show').classList.replace('number','loader');
-  document.querySelector('#show').innerText = '';
+  //document.querySelector('#show').classList.replace('number','loader');
+  //document.querySelector('#show').innerText = '';
 }
 
 // Animations
@@ -32,11 +32,35 @@ document.querySelector('#addBlog').addEventListener('click', async () => {
 
 
 async function delete_blog(){
-
   $('.deleteBlog').on("click", async function(){
     var blog_id = $(this).attr('blog_id');
     resetUI();
     await deleteBlog(blog_id);
+    await updateUI();
+  })
+}
+
+async function detail_blog(){
+
+
+  $('.blogDetail').on("click", async function(){
+    
+
+    var blog_id = $(this).attr('blog_id');
+        console.log('detail of blog is', blog_id);
+
+    // resetUI();
+    let blog_detail = await detailBlog(blog_id);
+    var blogHtml = '';
+    console.log('detail of blog is', blog_detail);
+    if(blog_detail){
+      blogHtml += '<h1>' + blog_detail.title + '</h1>';
+      blogHtml += '<p>' + blog_detail.content + '</p>';
+      blogHtml += '<p> Lượt xem: ' + blog_detail.view_number + '</p>';
+    }
+
+    $('.detail-blog').html(blogHtml);
+
     await updateUI();
   })
 }
@@ -85,10 +109,11 @@ async function updateUI(){
     var innerText = '';
 
     for (var key of Object.keys(blogs)) {
-      innerText += '<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + blogs[key].title + '</h5><p class="card-text">'+ blogs[key].content +'</p><a href="#" class="btn btn-primary">Detail</a><button class="btn btn-danger deleteBlog" blog_id="'+ key +'">Delete</button></div></div></div>';
+      innerText += '<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + blogs[key].title + '</h5><p class="card-text">'+ blogs[key].content +'</p><p>' + blogs[key].view_number + '</p><button class="btn btn-primary blogDetail" blog_id="'+ key +'">Detail</button><button class="btn btn-danger deleteBlog" blog_id="'+ key +'">Delete</button></div></div></div>';
     }
     document.querySelector('.list-blog').innerHTML = innerText;
     delete_blog();
+    detail_blog();
   }
 
 }
