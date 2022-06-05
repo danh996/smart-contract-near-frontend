@@ -18,10 +18,12 @@ export async function initContract() {
   // Initializing our contract APIs by contract name and configuration
   window.contract = await new Contract(window.walletConnection.account(), nearConfig.contractName, {
     // View methods are read only. They don't modify the state, but usually return some value.
-    viewMethods: ['get_num'],
+    viewMethods: ['get_blog_by_id', 'get_all_blogs'],
     // Change methods can modify the state. But you don't receive the returned value when called.
-    changeMethods: ['increment', 'decrement', 'reset'],
+    changeMethods: ['delete_blog', 'edit_blog', 'update_blog_view', 'create_blog'],
   })
+
+  console.log(window.contract);
 }
 
 export function logout() {
@@ -38,8 +40,8 @@ export function login() {
   window.walletConnection.requestSignIn(nearConfig.contractName)
 }
 
-export async function getCounter(){
-  let count = await window.contract.get_num({args:{}})
+export async function getBlogs(){
+  let count = await window.contract.get_all_blogs({args:{}})
                                    .catch(err => errorHelper(err))
   return count;
 }

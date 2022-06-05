@@ -1,5 +1,5 @@
 import "regenerator-runtime/runtime";
-import { initContract, login, logout, getCounter, counterIncrement,
+import { initContract, login, logout, getBlogs, counterIncrement,
          counterDecrement, counterReset } from './near/utils'
 
 function resetUI(){
@@ -67,19 +67,30 @@ async function signedInFlow() {
 }
 
 async function updateUI(){
-  let count = await getCounter();
-  
+  let blogs = await getBlogs();
   document.querySelector('#show').classList.replace('loader','number');
-  document.querySelector('#show').innerText = count === undefined ? 'calculating...' : count;
+  document.querySelector('#show').innerText = blogs === undefined ? 'calculating...' : blogs;
   document.querySelector('#left').classList.toggle('eye');
 
-  if (count >= 0) {
+  if(blogs != undefined){
+    var innerText = '';
+    let blogArr = Object.keys(blogs).map((k) => blogs[k])
+
+    for (var i = 0 ;i < blogArr.length; i++){
+      innerText += '<div class="col"><div class="card"><div class="card-body"><h5 class="card-title">' + blogArr[i].title + '</h5><p class="card-text">'+ blogArr[i].content +'</p><a href="#" class="btn btn-primary">Detail</a></div></div></div>'
+    }
+
+    document.querySelector('.list-blog').innerHTML = innerText;
+  }
+
+
+  if (blogs >= 0) {
     document.querySelector('.mouth').classList.replace('cry','smile');
   } else {
     document.querySelector('.mouth').classList.replace('smile','cry');
   }
 
-  if (count > 20 || count < -20) {
+  if (blogs > 20 || blogs < -20) {
     document.querySelector('.tongue').style.display = 'block';
   } else {
     document.querySelector('.tongue').style.display = 'none';

@@ -1,5 +1,5 @@
 // Once you deploy the contract to its final account, make sure to specify it here
-const CONTRACT_NAME = process.env.CONTRACT_NAME || 'change_this_account'; /* TODO: Change this to the deployed account */
+const CONTRACT_NAME = process.env.CONTRACT_NAME || 'dev-1654345120325-30384706584718'; /* TODO: Change this to the deployed account */
 
 function getConfig (env) {
   switch (env) {
