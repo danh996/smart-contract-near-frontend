@@ -12,15 +12,7 @@ function resetUI(){
 }
 
 // Animations
-document.querySelector('#c').addEventListener('click', () => {
-  document.querySelector('#left').classList.toggle('eye');
-});
-document.querySelector('#b').addEventListener('click', () => {
-  document.querySelector('#right').classList.toggle('eye');
-});
-document.querySelector('#d').addEventListener('click', () => {
-  document.querySelector('.dot').classList.toggle('on');
-});
+
 
 document.querySelector('#title').addEventListener('change', async  () => {
   input_title = document.querySelector('#title').value;
@@ -34,8 +26,6 @@ document.querySelector('#content').addEventListener('change', async  () => {
 // Buttons - Interact with the Smart Contract
 document.querySelector('#addBlog').addEventListener('click', async () => {
   resetUI();
-  console.log("input title is", input_title);
-  console.log("input content is", input_content);
   await addBlog(input_title, input_content, 1);
   await updateUI();
 });
@@ -89,9 +79,7 @@ async function signedInFlow() {
 
 async function updateUI(){
   let blogs = await getBlogs();
-  document.querySelector('#show').classList.replace('loader','number');
-  document.querySelector('#show').innerText = blogs === undefined ? 'calculating...' : blogs;
-  document.querySelector('#left').classList.toggle('eye');
+  
 
   if(blogs != undefined){
     var innerText = '';
