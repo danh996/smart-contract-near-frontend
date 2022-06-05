@@ -46,6 +46,10 @@ export async function getBlogs(){
   return count;
 }
 
+export async function addBlog(title, content, category_id){
+  await window.contract.create_blog({args:{"title":title, "content":content, "category_id": 1}})
+}
+
 export async function counterIncrement(){
   await window.contract.increment({args:{}})
 }

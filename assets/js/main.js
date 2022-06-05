@@ -1,5 +1,8 @@
+var input_content = null;
+var input_title = null;
+
 import "regenerator-runtime/runtime";
-import { initContract, login, logout, getBlogs, counterIncrement,
+import { initContract, login, logout, getBlogs, addBlog,
          counterDecrement, counterReset } from './near/utils'
 
 function resetUI(){
@@ -18,10 +21,21 @@ document.querySelector('#d').addEventListener('click', () => {
   document.querySelector('.dot').classList.toggle('on');
 });
 
+document.querySelector('#title').addEventListener('change', async  () => {
+  input_title = document.querySelector('#title').value;
+});
+document.querySelector('#content').addEventListener('change', async  () => {
+  input_content = document.querySelector('#content').value;
+});
+
+
+
 // Buttons - Interact with the Smart Contract
-document.querySelector('#plus').addEventListener('click', async () => {
+document.querySelector('#addBlog').addEventListener('click', async () => {
   resetUI();
-  await counterIncrement();
+  console.log("input title is", input_title);
+  console.log("input content is", input_content);
+  await addBlog(input_title, input_content, 1);
   await updateUI();
 });
 
@@ -30,6 +44,7 @@ document.querySelector('#minus').addEventListener('click', async  () => {
   await counterDecrement();
   await updateUI();
 });
+
 document.querySelector('#a').addEventListener('click', async  () => {
   resetUI();
   await counterReset();
@@ -81,18 +96,5 @@ async function updateUI(){
     }
 
     document.querySelector('.list-blog').innerHTML = innerText;
-  }
-
-
-  if (blogs >= 0) {
-    document.querySelector('.mouth').classList.replace('cry','smile');
-  } else {
-    document.querySelector('.mouth').classList.replace('smile','cry');
-  }
-
-  if (blogs > 20 || blogs < -20) {
-    document.querySelector('.tongue').style.display = 'block';
-  } else {
-    document.querySelector('.tongue').style.display = 'none';
   }
 }
